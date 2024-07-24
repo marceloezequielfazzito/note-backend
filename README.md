@@ -71,7 +71,7 @@ docker image build --platform=linux/amd64 -t note-test-server:v1 .
 run compose file
 
 ```bash
-go docker compose up
+docker compose up
 ```
 
 it will expose port 9090
@@ -195,7 +195,7 @@ request body
 ```json
 
 {
-  "title":"new note",                    mandatory
+  "title":"new note",                    mandatory,
   "text": "this is the note text note",  mandatory
   "tags":["BUSINESS,PERSONAL,IMPORTANT"] optional
 
@@ -234,10 +234,10 @@ request body
 ```json
 
 {
-  "id":"66a037303b4a203552c5fc12b", mandatory     
+  "id":"66a037303b4a203552c5fc12b", mandatory
   "title":"new note",               mandatory
   "text": "this is the note text",  mandatory
-  "tags":["IMPORTANT"]              optional
+  "tags":["IMPORTANT"]              optional 
 
 }
 
