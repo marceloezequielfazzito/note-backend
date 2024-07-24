@@ -66,7 +66,7 @@ public class NoteRepository {
     public boolean delete(String id) {
         Criteria criteria = Criteria.where("id").is(id);
         DeleteResult deleteResult = mongoTemplate.remove(new Query(criteria), Note.class);
-        return deleteResult.wasAcknowledged();
+        return deleteResult.getDeletedCount() != 0;
     }
 
     public void deleteAll(){

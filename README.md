@@ -78,60 +78,225 @@ it will expose port 9090
 
 # How to use
 
-- The service is in charge of managing the notes using .
+- The service is in charge of managing notes using mongodb as persistence layer.
  
 
-### Create a new counter
+### GET notes title and date created
 
-```bash
-curl -XPOST -H "Content-type: application/json" 'http://[server]:[port]/v1/counter'
 ```
-response body
+GET http://[server]:[port]/api/v1/notes?tags=[BUSINESS,PERSONAL,IMPORTANT]  - optional query params tags
+
+example 
+
+http://localhost:9090/api/v1/notes?tags=BUSINESS,PERSONAL
+```
+response 200 ok
 
 ```json
-{
-  "value":0,
-  "id":"546005a8-90e1-4969-b741-eb98518ab0ac"
-}
+[
+  {
+    "id": "66a0389e5b899534ecef66a9",
+    "title": "new note",
+    "dateCreated": "2024-07-23T23:11:26.379"
+  },
+  {
+    "id": "66a037f04c2fec5300cba6e9",
+    "title": "new note 2",
+    "dateCreated": "2024-07-23T23:08:32.306"
+  }
+]
 ``` 
 
-### Increment a counter
+### GET note Text
 
-```bash
-curl -XPATCH -H "Content-type: application/json" 'http://[server]:[port]/v1/counter/[counterID]/increment'
 ```
-response body
+GET http://[server]:[port]/api/v1/notes/[id]/text
+
+example 
+
+http://localhost:9090/api/v1/notes/66a0389e5b899534ecef66a9/text
+
+```
+response 200 OK
 
 ```json
+
 {
-  "value":1,
-  "id":"546005a8-90e1-4969-b741-eb98518ab0ac"
+  "text": "this is the note text note"
 }
+
 ``` 
 
-### Decrement a counter
-
-```bash
-curl -XPATCH -H "Content-type: application/json" 'http://[server]:[port]/v1/counter/[counterID]/decrement'
-```
-response body
+response 400 note not found
 
 ```json
+
 {
-  "value":-1,
-  "id":"546005a8-90e1-4969-b741-eb98518ab0ac"
+  "timestamp": "2024-07-24T21:03:14.150+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "note id:  66a0389e5b899534ecef66a1 not found",
+  "path": "/api/v1/notes/66a0389e5b899534ecef66a1/text"
 }
+
 ``` 
-### Reset a counter
 
-```bash
-curl -XPATCH -H "Content-type: application/json" 'http://[server]:[port]/v1/counter/[counterID]/reset'
+### GET note Text stats
+
 ```
-response body
+GET http://[server]:[port]/api/v1/notes/[id]/stats
+
+example 
+
+http://localhost:9090/api/v1/notes/66a0389e5b899534ecef66a9/stats
+
+```
+response 200 OK
 
 ```json
+
 {
-  "value":0,
-  "id":"546005a8-90e1-4969-b741-eb98518ab0ac"
+  "note": 2,
+  "the": 1,
+  "this": 1,
+  "is": 1,
+  "text": 1
 }
+
+``` 
+
+response 400 note not found
+
+```json
+
+{
+  "timestamp": "2024-07-24T21:03:14.150+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "note id:  66a0389e5b899534ecef66a1 not found",
+  "path": "/api/v1/notes/66a0389e5b899534ecef66a1/text"
+}
+
+``` 
+
+
+### POST create note
+
+```
+POST http://[server]:[port]/api/v1/notes
+
+example 
+
+http://localhost:9090/api/v1/notes
+
+```
+request body 
+
+```json
+
+{
+  "title":"new note",                    mandatory
+  "text": "this is the note text note",  mandatory
+  "tags":["BUSINESS,PERSONAL,IMPORTANT"] optional
+
+}
+
+
+```
+response 200 OK
+
+```json
+
+{
+  "id": "66a16d61db8f7f5152e7ece6",
+  "title": "new note",
+  "text": "this is the note text note",
+  "tags": [
+    "BUSINESS"
+  ],
+  "createdDate": "2024-07-24T21:08:49.770843069"
+}
+
+```
+
+### PUT update note
+
+```
+PUT http://[server]:[port]/api/v1/notes
+
+example 
+
+http://localhost:9090/api/v1/notes
+
+```
+request body
+
+```json
+
+{
+  "id":"66a037303b4a203552c5fc12b", mandatory     
+  "title":"new note",               mandatory
+  "text": "this is the note text",  mandatory
+  "tags":["IMPORTANT"]              optional
+
+}
+
+
+```
+response 200 OK
+
+```json
+
+{
+  "id": "66a037303b4a203552c5fc12b",
+  "title": "new note",
+  "text": "this is the note text",
+  "tags": [
+    "IMPORTANT"
+  ],
+  "createdDate": "2024-07-24T21:08:49.77"
+}
+
+```
+
+response 400 note not found
+
+```json
+
+{
+  "timestamp": "2024-07-24T21:03:14.150+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "note id:  66a037303b4a203552c5fc12b not found",
+  "path": "/api/v1/notes/66a0389e5b899534ecef66a1/text"
+}
+
+``` 
+
+### Delete remove note
+
+```
+DELETE http://[server]:[port]/api/v1/[id]
+
+example 
+
+http://localhost:9090/api/v1/669fe14c719286786352fb1e
+
+```
+response 200 OK
+
+empty body
+
+response 400 note not found
+
+```json
+
+{
+  "timestamp": "2024-07-24T21:03:14.150+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "note id:  669fe14c719286786352fb1e not found",
+  "path": "/api/v1/notes/66a0389e5b899534ecef66a1/text"
+}
+
 ``` 
