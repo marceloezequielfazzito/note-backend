@@ -35,7 +35,7 @@ It will create notes-service.jar executable jar file inside target folder
 once build
 
 ```bash
-java -jar pex-test-backend
+java -jar notes-service.jar
 ```
 
 The application will try to read the following environment variables
@@ -61,6 +61,12 @@ default internal .env file values
 
 
 ### Run using provided docker compose
+
+Build jar file
+
+```bash
+mvn clean intall
+```
 
 build note-test-server docker image
 
