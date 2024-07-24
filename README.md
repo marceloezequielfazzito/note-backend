@@ -201,9 +201,9 @@ request body
 ```json
 
 {
-  "title":"new note",                    mandatory,
+  "title":"new note",                    mandatory
   "text": "this is the note text note",  mandatory
-  "tags":["BUSINESS,PERSONAL,IMPORTANT"] optional
+  "tags":["BUSINESS,PERSONAL,IMPORTANT"] optional 
 
 }
 
