@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: prod
+  main:
+    banner-mode: console
+
+  data:
+    mongodb:
+      host: ${MONGO_HOST}
+      port: ${MONGO_PORT}
+      database: admin
+      auto-index-creation: true
+
+server:
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+
